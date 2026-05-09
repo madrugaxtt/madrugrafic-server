@@ -1,0 +1,245 @@
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madrugrafic Premium</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f0f0f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  width: 100%;
+  padding: 25px;
+  background: #151515;
+  border-bottom: 1px solid #2a2a2a;
+  text-align: center;
+}
+
+.logo {
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+}
+
+.sub {
+  color: #8f8f8f;
+  margin-top: 5px;
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.card {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+button {
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th {
+  background: #202020;
+  padding: 15px;
+}
+
+.table td {
+  background: #151515;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #252525;
+}
+
+.status-active {
+  color: #00ff88;
+  font-weight: bold;
+}
+
+.status-banned {
+  color: red;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  color: #777;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo">MADRUGRAFIC</div>
+  <div class="sub">Painel Premium de Keys</div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <button onclick="gerarKey()">GERAR KEY</button>
+  </div>
+
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>KEY</th>
+          <th>STATUS</th>
+          <th>AÇÃO</th>
+        </tr>
+      </thead>
+
+      <tbody id="lista"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+Madrugrafic Premium © 2026
+</div>
+
+<script>
+async function gerarKey() {
+  await fetch('http://localhost:3000/generate');
+  carregar();
+}
+
+async function carregar() {
+  const res = await fetch('http://localhost:3000/keys');
+  const data = await res.json();
+
+  const lista = document.getElementById('lista');
+  lista.innerHTML = '';
+
+  data.forEach(k => {
+
+    let statusClass = k.status === 'active'
+      ? 'status-active'
+      : 'status-banned';
+
+    lista.innerHTML += `
+      <tr>
+        <td>${k.id}</td>
+        <td>${k.key}</td>
+        <td class="${statusClass}">${k.status}</td>
+        <td>
+          <button onclick="banir('${k.key}')">BANIR</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function banir(key) {
+  await fetch('http://localhost:3000/block/' + key);
+  carregar();
+}
+
+carregar();
+</script>
+
+</body>
+</html>
+```
+
+---
+
+# ✅ Depois disso
+
+1. Salva (`Ctrl + S`)
+2. Atualiza o navegador (`F5`)
+3. Painel premium pronto 🔥
+
+---
+
+# 🚀 Próximo passo pra finalizar tudo
+
+## 🌐 Colocar online
+
+Cria conta grátis em:
+
+* render.com
+
+Depois:
+
+```bash
+npm install -g pm2
+```
+
+Pra deixar rodando 24h:
+
+```bash
+pm2 start server.js
+```
+
+---
+
+# 🎮 Próximo passo final
+
+Conectar no mod ETS2:
+
+O mod vai:
+
+* pedir key
+* validar online
+* bloquear key compartilhada
+* liberar HDR + desfoque
+
+---
+
+# 💡 Importante
+
+Sempre pra usar local:
+
+```bash
+cd Documents\madrugrafic-server
+node server.js
+```
+
+Depois abre:
+
+```plaintext
+index.html
+```
